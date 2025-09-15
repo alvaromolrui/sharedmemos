@@ -45,14 +45,14 @@ I was inspired by the approach taken by Immich Public Proxy and I wanted somethi
 
 # Example Docker Compose File
 
-> Note: [This PR](https://github.com/usememos/memos/pull/4930) adds support for using `MEMOS_INSTANCE_URL` when copying a memo link using the "Copy Link" button. What does this mean? You can visit your Memos instance at memos.private.example.com, create a public memo, click "Copy Link", and have a ready-to-share public link of the form `memos.public.example.com/memos/<memo id>`.
+> Note: Memos 0.25.1 includes support for using `MEMOS_INSTANCE_URL` when copying a memo link using the "Copy Link" button. What does this mean? You can visit your Memos instance at memos.private.example.com, create a public memo, click "Copy Link", and have a ready-to-share public link of the form `memos.public.example.com/memos/<memo id>`.
 
 ```yaml
 services:
 
   # Memos instance
   memos:
-    image: neosmemo/memos:canary
+    image: neosmemo/memos:0.25.1
     restart: unless-stopped
     depends_on:
       - db
@@ -61,8 +61,6 @@ services:
     environment:
       MEMOS_DRIVER: postgres
       MEMOS_DSN: "user=memos password=secret dbname=memosdb host=db sslmode=disable"
-      # The Memos variable `MEMOS_INSTANCE_URL` doesn't do anything in the latest
-      # release (0.25.0 as of this writing) which is why I'm using the canary tag.
       MEMOS_INSTANCE_URL: memos.public.example.com
     volumes:
       - ./server-data:/var/opt/memos
