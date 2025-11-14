@@ -12,7 +12,7 @@ WORKDIR /app
 
 RUN pip install "poetry==$POETRY_VERSION"
 
-COPY memos-public-proxy .
+COPY sharedmemos .
 RUN poetry config virtualenvs.in-project true && \
     poetry install --only=main --no-root && \
     poetry build && \
@@ -28,5 +28,5 @@ COPY --from=builder /app/.venv /venv
 
 EXPOSE 5000
 
-ENTRYPOINT ["/venv/bin/python", "-m", "gunicorn", "--bind", "0.0.0.0:5000", "--forwarded-allow-ips=*", "-w", "4", "--log-level", "$MEMOS_LOG_LEVEL", "--capture-output", "memos_public_proxy.app:app"]
+ENTRYPOINT ["/venv/bin/python", "-m", "gunicorn", "--bind", "0.0.0.0:5000", "--forwarded-allow-ips=*", "-w", "4", "--log-level", "$MEMOS_LOG_LEVEL", "--capture-output", "sharedmemos.app:app"]
 CMD []

@@ -6,7 +6,7 @@ import markdown2
 import pathlib
 import re
 
-app = flask.Flask("memos-public-proxy")
+app = flask.Flask("sharedmemos")
 
 MEMOS_HOST = os.environ.get("MEMOS_HOST", "http://memos:5230")
 MEMOS_LOG_LEVEL = os.environ.get("MEMOS_LOG_LEVEL", "ERROR").upper()

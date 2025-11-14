@@ -1,5 +1,5 @@
 [project]
-name = "memos-public-proxy"
+name = "sharedmemos"
 version = "0.1.0"
 description = ""
 authors = [
@@ -17,8 +17,8 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "memos_public_proxy", from = "src"}]
-include = [{path = "src/memos_public_proxy/html/*.html", format = ["sdist", "wheel"]}]
+packages = [{include = "sharedmemos", from = "src"}]
+include = [{path = "src/sharedmemos/html/*.html", format = ["sdist", "wheel"]}]
 
 
 [tool.poetry.group.dev.dependencies]

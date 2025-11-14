@@ -1,3 +1,6 @@
+```
+This is a fork from from [clnhlzmn/memos-public-proxy](https://github.com/clnhlzmn/memos-public-proxy)
+```
 # Memos Public Proxy
 
 Share your public [Memos](https://github.com/usememos/memos) in a safe way without exposing your Memos server to the public (inspired by [Immich Public Proxy](https://github.com/alangrainger/immich-public-proxy)).
@@ -6,13 +9,20 @@ Share your public [Memos](https://github.com/usememos/memos) in a safe way witho
 
 # Content
 
-* [About](#about)
-* [Usage](#usage)
-* [Installation](#installation)
-  * [Settings](#settings)
-  * [Example Docker Compose](#example-docker-compose-file)
-  * [Example Caddy Config](#example-caddy-config)
-* [Dev Notes](#dev-notes)
+- [Memos Public Proxy](#memos-public-proxy)
+- [Content](#content)
+- [About](#about)
+- [Usage](#usage)
+  - [Create a public memo](#create-a-public-memo)
+  - [Copy the link](#copy-the-link)
+  - [Share it](#share-it)
+- [Installation](#installation)
+  - [Settings](#settings)
+- [Example Docker Compose File](#example-docker-compose-file)
+  - [Example Caddy Config](#example-caddy-config)
+- [Dev Notes](#dev-notes)
+  - [Building](#building)
+  - [Running locally](#running-locally)
 
 
 
@@ -49,40 +59,39 @@ I was inspired by the approach taken by Immich Public Proxy and I wanted somethi
 
 ```yaml
 services:
-
-  # Memos instance
   memos:
-    image: neosmemo/memos:0.25.1
-    restart: unless-stopped
-    depends_on:
-      - db
+    image: neosmemo/memos:stable
+    container_name: memos
     ports:
-      - 127.0.0.1:5230:5230
-    environment:
-      MEMOS_DRIVER: postgres
-      MEMOS_DSN: "user=memos password=secret dbname=memosdb host=db sslmode=disable"
-      MEMOS_INSTANCE_URL: memos.public.example.com
+      - 5230:5230
     volumes:
-      - ./server-data:/var/opt/memos
-
-  db:
-    image: postgres:16.1
+      - ./memos:/var/opt/memos
+    environment:
+      - MEMOS_MODE=prod
+      - MEMOS_PORT=5230
+      - MEMOS_INSTANCE_URL=${MEMOS_INSTANCE_URL}
+    networks:
+      - memosnet
     restart: unless-stopped
-    volumes:
-      - ./database:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_USER: memos
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: memosdb
-
+  memogram:
+    env_file: .env
+    build: ./memogram
+    container_name: memogram
+    networks:
+      - memosnet
   memos_public_proxy:
     image: ghcr.io/clnhlzmn/memos-public-proxy:main
     restart: unless-stopped
     environment:
-      # MEMOS_HOST: http://memos:5230 # Not necessary, the default works in this example.
       MEMOS_LOG_LEVEL: info
     ports:
-      - 127.0.0.1:8467:5000
+      - 8467:5000
+    networks:
+      - memosnet
+networks:
+  memosnet:
+    driver: bridge
+
 ```
 
 ## Example Caddy Config
@@ -100,7 +109,7 @@ services:
 
 *.public.example.com {
     # The following proxies memos.public.example.com to
-    # the memos-public-proxy server (accessible from any IP).
+    # the sharedmemos server (accessible from any IP).
     @memos host memos.public.example.com
     reverse_proxy @memos 127.0.0.1:8467
 }
@@ -110,8 +119,8 @@ services:
 
 ## Building
 
-`docker build -t memos-public-proxy .`
+`docker build -t sharedmemos .`
 
 ## Running locally
 
-`docker run --rm --network host -e MEMOS_HOST=<memos host> -e MEMOS_PORT=80 memos-public-proxy`
+`docker run --rm --network host -e MEMOS_HOST=<memos host> -e MEMOS_PORT=80 sharedmemos`
