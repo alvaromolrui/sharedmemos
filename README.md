@@ -1,7 +1,7 @@
 ```
 This is a fork from [clnhlzmn/memos-public-proxy](https://github.com/clnhlzmn/memos-public-proxy)
 ```
-# Memos Public Proxy
+# sharedmemos
 
 Share your public [Memos](https://github.com/usememos/memos) in a safe way without exposing your Memos server to the public (inspired by [Immich Public Proxy](https://github.com/alangrainger/immich-public-proxy)).
 
@@ -9,7 +9,7 @@ Share your public [Memos](https://github.com/usememos/memos) in a safe way witho
 
 # Content
 
-- [Memos Public Proxy](#memos-public-proxy)
+- [sharedmemos](#memos-public-proxy)
 - [Content](#content)
 - [About](#about)
 - [Usage](#usage)
@@ -28,7 +28,7 @@ Share your public [Memos](https://github.com/usememos/memos) in a safe way witho
 
 # About
 
-I was inspired by the approach taken by Immich Public Proxy and I wanted something similar for Memos. The Memos app already has a concept of public and private visibility, and memos are identified by long random strings. What Memos Public Proxy does is provide a locked down route for the public to access those public memos without exposing the rest of the Memos instance (auth, api, etc..).
+I was inspired by the approach taken by Immich Public Proxy and I wanted something similar for Memos. The Memos app already has a concept of public and private visibility, and memos are identified by long random strings. What sharedmemos does is provide a locked down route for the public to access those public memos without exposing the rest of the Memos instance (auth, api, etc..).
 
 # Usage
 

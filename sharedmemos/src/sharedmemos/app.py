@@ -5,6 +5,7 @@ import json
 import markdown2
 import pathlib
 import re
+from importlib import resources
 
 app = flask.Flask("sharedmemos")
 
@@ -24,7 +25,35 @@ EXTRAS = [
 ICON_PATH = "/logo.webp"
 
 HASHTAG_PATTERN = re.compile(r"#[^\s]+")
-HTML = "\n".join(p.read_text() for p in (pathlib.Path(__file__).parent / "html").glob("*.html"))
+
+
+def _load_html_files():
+    """Load HTML files from the html directory, works both in development and when installed."""
+    html_contents = []
+    
+    # Try using importlib.resources (works when package is installed)
+    try:
+        html_dir = resources.files("sharedmemos.html")
+        html_files = sorted([f for f in html_dir.iterdir() if f.name.endswith(".html")])
+        for html_file in html_files:
+            html_contents.append(html_file.read_text(encoding="utf-8"))
+    except (ModuleNotFoundError, AttributeError, TypeError):
+        # Fallback to pathlib (works in development)
+        html_path = pathlib.Path(__file__).parent / "html"
+        if html_path.exists():
+            html_files = sorted(html_path.glob("*.html"))
+            for html_file in html_files:
+                html_contents.append(html_file.read_text(encoding="utf-8"))
+        else:
+            app.logger.warning(f"HTML directory not found at {html_path}")
+    
+    if not html_contents:
+        app.logger.error("No HTML files were loaded!")
+    
+    return "\n".join(html_contents)
+
+
+HTML = _load_html_files()
 
 app.logger.setLevel(MEMOS_LOG_LEVEL)
 
