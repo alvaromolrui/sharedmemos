@@ -40,7 +40,7 @@ services:
     networks:
       - memosnet
   sharedmemos:
-    build: ./sharedmemos
+    image: sharedmemos
     container_name: sharedmemos
     restart: unless-stopped
     environment:
