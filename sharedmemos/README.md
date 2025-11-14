@@ -1,0 +1,1 @@
+to run: from sharedmemos do `gunicorn -w 4 --log-level INFO --capture-output 'src.sharedmemos.app:app'`
