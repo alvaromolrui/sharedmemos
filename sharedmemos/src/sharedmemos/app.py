@@ -22,7 +22,6 @@ EXTRAS = [
     "latex",
     "mermaid",
 ]
-ICON_PATH = "/logo.webp"
 
 HASHTAG_PATTERN = re.compile(r"#[^\s]+")
 
@@ -138,10 +137,3 @@ def get_attachment(id: str, filename: str):
 
     return response.content, response.status_code, response.headers.items()
 
-
-@app.route(ICON_PATH)
-def get_icon():
-    app.logger.info(f"GET {ICON_PATH}")
-    response = requests.get(f"{MEMOS_HOST}{ICON_PATH}")
-
-    return response.content, response.status_code, response.headers.items()
