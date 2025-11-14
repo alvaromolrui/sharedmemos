@@ -1,5 +1,5 @@
 ```
-This is a fork from from [clnhlzmn/memos-public-proxy](https://github.com/clnhlzmn/memos-public-proxy)
+This is a fork from [clnhlzmn/memos-public-proxy](https://github.com/clnhlzmn/memos-public-proxy)
 ```
 # Memos Public Proxy
 
